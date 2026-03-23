@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FORCA TV | المشغل الذكي</title>
     
-    <script src="https://pl28961727.profitablecpmratenetwork.com/c3/3f/16/c33f165bbfa5fe7f26e4b260d5b6a6ed.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
@@ -45,34 +44,28 @@
         <div class="yt-grid">
             <div class="item-box" id="live-card" onclick="switchToLive()">
                 <div class="thumb-container">
-                    <img src="https://media.fcbar.site/thumb1.jpg" alt="Live"> <span class="status-tag">بث مباشر</span>
+                    <img src="https://media.fcbar.site/thumb1.jpg" alt="Live"> 
+                    <span class="status-tag">بث مباشر</span>
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3 style="font-size: 0.9rem;">الرجوع للبث المباشر / الإعلانات</h3>
+                <h3 style="font-size: 0.9rem;">الرجوع للبث المباشر</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'تحليل فوز البرسا الأخير')">
+            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'تحليل مباراة برشلونة')">
                 <div class="thumb-container">
                     <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3 style="font-size: 0.9rem;">تحليل فوز البرسا الأخير</h3>
+                <h3 style="font-size: 0.9rem;">تحليل مباراة برشلونة</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'أهداف الأسبوع')">
+            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'أجمل أهداف الأسبوع')">
                 <div class="thumb-container">
                     <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3 style="font-size: 0.9rem;">أهداف الأسبوع</h3>
+                <h3 style="font-size: 0.9rem;">أجمل أهداف الأسبوع</h3>
             </div>
-        </div>
-
-        <div style="margin-top:30px;">
-            <script type="text/javascript">
-                atOptions = {'key' : '6885d0e957b9c4c7a142c9e23f6f6850','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};
-            </script>
-            <script type="text/javascript" src="https://www.highperformanceformat.com/6885d0e957b9c4c7a142c9e23f6f6850/invoke.js"></script>
         </div>
     </div>
 
@@ -85,7 +78,6 @@
         const r2Backup = 'https://media.fcbar.site/test.mp4';
         let hls = null;
 
-        // وظيفة تشغيل البث المباشر أو الـ R2
         function switchToLive() {
             iframePlayer.classList.remove('active');
             iframePlayer.src = "";
@@ -114,7 +106,6 @@
             });
         }
 
-        // وظيفة التحويل لليوتيوب
         function switchToYT(videoID, title) {
             videoPlayer.pause();
             videoPlayer.classList.remove('active');
@@ -124,15 +115,11 @@
             currentTitle.innerText = "يعرض الآن: " + title;
         }
 
-        // تشغيل أولي (البث المباشر)
         switchToLive();
 
-        // فتح الصوت عند أول ضغطة
         document.addEventListener('click', () => {
             videoPlayer.muted = false;
         }, { once: true });
     </script>
-
-    <script src="https://pl28961738.profitablecpmratenetwork.com/c0/f1/3f/c0f13f0e3752bc91ec64e84a0bc6eb05.js"></script>
 </body>
 </html>
