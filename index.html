@@ -13,16 +13,13 @@
         .header { background: var(--barca-red); padding: 15px; border-bottom: 4px solid var(--gold); }
         .main-container { width: 95%; max-width: 1000px; margin: 15px auto; padding-bottom: 50px; }
         
-        /* المشغل الرئيسي */
         .video-wrapper { background: #000; border: 3px solid var(--gold); border-radius: 15px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); aspect-ratio: 16/9; }
         #main-video, #main-iframe { width: 100%; height: 100%; border: none; display: none; }
         #main-video.active, #main-iframe.active { display: block; }
 
-        /* زر التحديث وتفعيل الصوت */
         .action-btn { background: #28a745; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; margin: 20px 0; transition: 0.3s; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .action-btn:hover { background: #218838; transform: scale(1.05); }
 
-        /* شبكة المقاطع (4 أعمدة) */
         .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 30px; }
         .item-box { background: rgba(0,0,0,0.4); border-radius: 12px; padding: 8px; border: 1px solid rgba(255,215,0,0.2); cursor: pointer; transition: 0.3s; }
         .item-box:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(0,0,0,0.6); }
@@ -61,28 +58,28 @@
                 <h3>الرجوع للبث المباشر</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'تحليل المباراة الأولى')">
+            <div class="item-box" onclick="switchToYT('UENAl15P36k', 'أهداف مباراة برشلونة وبيرنلي')">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="YT">
+                    <img src="https://img.youtube.com/vi/UENAl15P36k/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>تحليل المباراة الأولى</h3>
+                <h3>أهداف مباراة برشلونة وبيرنلي</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'ملخص الأهداف')">
+            <div class="item-box" onclick="switchToYT('zAa2b0NLUgY', 'تحليل فوز برشلونة الأخير')">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="YT">
+                    <img src="https://img.youtube.com/vi/zAa2b0NLUgY/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>ملخص الأهداف الحماسية</h3>
+                <h3>تحليل فوز برشلونة الأخير</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('dQw4w9WgXcQ', 'أخبار الانتقالات')">
+            <div class="item-box" onclick="switchToYT('6T7N_ikApZ4', 'بث مباشر سكاي نيوز')">
                 <div class="thumb-container">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="YT">
+                    <img src="https://img.youtube.com/vi/6T7N_ikApZ4/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>آخر أخبار الانتقالات</h3>
+                <h3>بث مباشر سكاي نيوز</h3>
             </div>
         </div>
     </div>
@@ -138,10 +135,8 @@
             currentTitle.innerText = "يعرض الآن: " + title;
         }
 
-        // تشغيل أولي
         switchToLive();
 
-        // تفعيل الصوت عند أول تفاعل
         document.addEventListener('click', () => {
             if (videoPlayer.classList.contains('active')) {
                 videoPlayer.muted = false;
