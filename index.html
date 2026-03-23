@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FORCA TV | Dashboard</title>
     
-    <!-- مكتبات الفيديو -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
@@ -27,10 +26,25 @@
 
         .header { 
             background: linear-gradient(90deg, var(--barca-blue), var(--barca-red)); 
-            padding: 20px; 
+            padding: 15px 20px; 
             border-bottom: 3px solid var(--gold); 
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .header-logo {
+            height: 70px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
         }
 
         .main-container { 
@@ -40,7 +54,6 @@
             padding-bottom: 60px; 
         }
 
-        /* مشغل الفيديو */
         .video-wrapper { 
             background: #000; 
             border: 2px solid var(--gold); 
@@ -61,22 +74,19 @@
             font-weight: bold; 
             cursor: pointer; 
             color: white; 
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transition: 0.3s; 
             font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
         .btn-unmute { background: #28a745; }
         .btn-live { background: #e2001a; }
-        .action-btn:hover { transform: scale(1.08); }
+        .action-btn:hover { transform: scale(1.05); }
 
-        /* حاوية البيانات الحية */
         .data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 35px; }
         .data-card { 
             background: var(--card-bg); 
             border-radius: 18px; 
             padding: 20px; 
             border: 1px solid #333; 
-            transition: 0.3s;
         }
         .section-title { 
             border-right: 4px solid var(--gold); 
@@ -103,7 +113,6 @@
             border-radius: 8px; 
             color: var(--gold); 
             font-weight: bold; 
-            font-family: 'Courier New', monospace;
             font-size: 1.1rem;
         }
 
@@ -111,7 +120,6 @@
         .match-info-vertical { text-align: center; width: 100%; }
         .match-time { font-size: 0.8rem; color: #888; margin-top: 4px; }
 
-        /* شبكة الفيديوهات */
         .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 45px; }
         .item-box { background: var(--card-bg); border-radius: 15px; padding: 12px; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
         .item-box:hover { border-color: var(--gold); transform: translateY(-8px); }
@@ -119,58 +127,51 @@
         .thumb-container img { width: 100%; height: 100%; object-fit: cover; }
         .thumb-container::after { 
             content: "▶"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            font-size: 30px; color: white; opacity: 0.8;
-            background: rgba(0,0,0,0.4); border-radius: 50%; width: 50px; height: 50px; 
+            font-size: 30px; color: white; background: rgba(0,0,0,0.4); border-radius: 50%; width: 50px; height: 50px; 
             display: flex; align-items: center; justify-content: center; padding-left: 5px;
         }
         h3 { font-size: 0.9rem; margin: 12px 0 5px 0; text-align: right; color: #eee; line-height: 1.5; }
 
-        @media (max-width: 768px) { .data-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) { .data-grid { grid-template-columns: 1fr; } .header h1 { font-size: 1.5rem; } }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <img src="logo.png" alt="Logo" class="header-logo">
         <h1>FORCA TV</h1>
     </div>
 
     <div class="main-container">
-        <!-- قسم العرض الرئيسي -->
         <div class="video-section">
             <div class="video-wrapper">
-                <!-- مشغل فيديو HLS -->
                 <video id="main-video" class="active" controls autoplay muted playsinline></video>
-                <!-- مشغل يوتيوب -->
                 <iframe id="main-iframe" allowfullscreen allow="autoplay; encrypted-media"></iframe>
             </div>
-            
             <div class="btn-group">
-                <button class="action-btn btn-unmute" id="unmute-btn" onclick="unmuteOnly()">🔊 فتح الصوت</button>
+                <button class="action-btn btn-unmute" onclick="unmuteOnly()">🔊 فتح الصوت</button>
                 <button class="action-btn btn-live" onclick="switchToLive()">🔴 البث المباشر</button>
             </div>
         </div>
 
-        <!-- قسم البيانات -->
         <div class="data-grid">
             <div class="data-card">
                 <div class="section-title">المباريات المنتهية</div>
                 <div id="past-matches-list"></div>
             </div>
-
             <div class="data-card">
                 <div class="section-title">المباريات القادمة</div>
                 <div id="upcoming-matches-list"></div>
             </div>
         </div>
 
-        <!-- قسم التحليلات -->
         <h2 style="text-align: right; border-right: 5px solid var(--gold); padding-right: 15px; margin-top: 50px;">أحدث التحليلات</h2>
         <div id="youtube-list" class="yt-grid"></div>
     </div>
 
     <script>
         /******************************************************************
-         * 🟢 لوحة التحكم (Control Panel) 🟢
+         * 🟢 لوحة التحكم (البيانات التي أرسلتها أنت) 🟢
          ******************************************************************/
 
         const CONFIG = {
@@ -197,106 +198,63 @@
         ];
 
         /******************************************************************
-         * 🛠️ منطق البرمجة الداخلي 🛠️
+         * 🛠️ المنطق البرمجي 🛠️
          ******************************************************************/
 
         const videoPlayer = document.getElementById('main-video');
         const iframePlayer = document.getElementById('main-iframe');
         let hlsPlayer = null;
 
-        function unmuteOnly() {
-            videoPlayer.muted = false;
-        }
+        function unmuteOnly() { videoPlayer.muted = false; }
 
-        // تشغيل البث المباشر
         function switchToLive() {
-            // إخفاء اليوتيوب وإظهار مشغل الفيديو
             iframePlayer.classList.remove('active');
-            iframePlayer.src = ""; // إيقاف فيديو اليوتيوب تماماً
+            iframePlayer.src = "";
             videoPlayer.classList.add('active');
-            
             if (Hls.isSupported()) {
                 if(hlsPlayer) hlsPlayer.destroy();
                 hlsPlayer = new Hls();
                 hlsPlayer.loadSource(CONFIG.liveUrl);
                 hlsPlayer.attachMedia(videoPlayer);
-                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => {
-                    videoPlayer.play().catch(e => console.log("Auto-play blocked"));
-                });
-                
-                hlsPlayer.on(Hls.Events.ERROR, (e, data) => {
-                    if (data.fatal) { videoPlayer.src = CONFIG.backupVideo; videoPlayer.play(); }
-                });
+                hlsPlayer.on(Hls.Events.MANIFEST_PARSED, () => videoPlayer.play());
             } else {
                 videoPlayer.src = CONFIG.liveUrl;
                 videoPlayer.play();
             }
         }
 
-        // تشغيل فيديو يوتيوب
         function playYouTube(id) {
-            // إخفاء مشغل الفيديو HLS وإظهار اليوتيوب
             if(hlsPlayer) hlsPlayer.stopLoad();
             videoPlayer.pause();
             videoPlayer.classList.remove('active');
-            
             iframePlayer.classList.add('active');
-            // إضافة autoplay=1 ليعمل الفيديو فوراً
             iframePlayer.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-            
-            // التمرير للأعلى ليشاهد المستخدم الفيديو
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function initApp() {
-            // رص المباريات السابقة
             let pastHtml = "";
-            PAST_MATCHES.forEach(match => {
-                pastHtml += `
-                    <div class="match-item">
-                        <span class="team-name">${match.home}</span>
-                        <div class="score-box">${match.score}</div>
-                        <span class="team-name" style="text-align:left">${match.away}</span>
-                    </div>`;
+            PAST_MATCHES.forEach(m => {
+                pastHtml += `<div class="match-item"><span class="team-name">${m.home}</span><div class="score-box">${m.score}</div><span class="team-name" style="text-align:left">${m.away}</span></div>`;
             });
             document.getElementById('past-matches-list').innerHTML = pastHtml;
 
-            // رص المباريات القادمة
             let upcomingHtml = "";
-            UPCOMING_MATCHES.forEach(match => {
-                upcomingHtml += `
-                    <div class="match-item">
-                        <div class="match-info-vertical">
-                            <div style="font-weight:bold;">${match.home} <span style="color:var(--gold)">VS</span> ${match.away}</div>
-                            <div class="match-time">${match.date} • ${match.time}</div>
-                        </div>
-                    </div>`;
+            UPCOMING_MATCHES.forEach(m => {
+                upcomingHtml += `<div class="match-item"><div class="match-info-vertical"><div style="font-weight:bold;">${m.home} <span style="color:var(--gold)">VS</span> ${m.away}</div><div class="match-time">${m.date} • ${m.time}</div></div></div>`;
             });
             document.getElementById('upcoming-matches-list').innerHTML = upcomingHtml;
 
-            // رص فيديوهات اليوتيوب وتأكيد ربط وظيفة الـ onclick
             let ytHtml = "";
-            YOUTUBE_LIST.forEach(video => {
-                ytHtml += `
-                    <div class="item-box" onclick="playYouTube('${video.id}')">
-                        <div class="thumb-container">
-                            <img src="https://img.youtube.com/vi/${video.id}/mqdefault.jpg">
-                        </div>
-                        <h3>${video.title}</h3>
-                    </div>`;
+            YOUTUBE_LIST.forEach(v => {
+                ytHtml += `<div class="item-box" onclick="playYouTube('${v.id}')"><div class="thumb-container"><img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg"></div><h3>${v.title}</h3></div>`;
             });
             document.getElementById('youtube-list').innerHTML = ytHtml;
-            
-            // البدء بالبث المباشر
             switchToLive();
         }
 
         window.onload = initApp;
-
-        // تفاعل المستخدم لفتح الصوت (أول نقرة في الصفحة)
-        document.addEventListener('click', () => {
-            if (videoPlayer.classList.contains('active')) videoPlayer.muted = false;
-        }, { once: true });
+        document.addEventListener('click', () => { if (videoPlayer.classList.contains('active')) videoPlayer.muted = false; }, { once: true });
     </script>
 </body>
 </html>
