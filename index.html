@@ -21,14 +21,14 @@
         .action-btn:hover { background: #218838; transform: scale(1.05); }
 
         .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 30px; }
-        .item-box { background: rgba(0,0,0,0.4); border-radius: 12px; padding: 8px; border: 1px solid rgba(255,215,0,0.2); cursor: pointer; transition: 0.3s; }
+        .item-box { background: rgba(0,0,0,0.4); border-radius: 12px; padding: 8px; border: 1px solid rgba(255,215,0,0.2); cursor: pointer; transition: 0.3s; height: 100%; display: flex; flex-direction: column; }
         .item-box:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(0,0,0,0.6); }
         .thumb-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #222; }
         .thumb-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         .thumb-container .play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 35px; color: white; opacity: 0.8; }
         
         .status-tag { background: #ff0000; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.65rem; position: absolute; top: 8px; right: 8px; font-weight: bold; }
-        h3 { font-size: 0.85rem; margin: 10px 0 5px 0; color: #fff; line-height: 1.4; }
+        h3 { font-size: 0.8rem; margin: 10px 0 5px 0; color: #fff; line-height: 1.4; text-align: right; padding: 0 5px; flex-grow: 1; }
     </style>
 </head>
 <body>
@@ -55,31 +55,31 @@
                     <span class="status-tag">LIVE</span>
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>الرجوع للبث المباشر</h3>
+                <h3>الرجوع للبث المباشر الرئيسي</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('UENAl15P36k', 'أهداف مباراة برشلونة وبيرنلي')">
+            <div class="item-box" onclick="switchToYT('UENAl15P36k', 'برشلونة 1-0 رايو فايكانو - أسباب سوء الأداء | الكوتش')">
                 <div class="thumb-container">
                     <img src="https://img.youtube.com/vi/UENAl15P36k/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>أهداف مباراة برشلونة وبيرنلي</h3>
+                <h3>برشلونة 1-0 رايو فايكانو - أسباب سوء الأداء | الكوتش</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('zAa2b0NLUgY', 'تحليل فوز برشلونة الأخير')">
+            <div class="item-box" onclick="switchToYT('zAa2b0NLUgY', 'هل سيميوني طعن هانز فليك في ديربي مدريد بعد عملية رايو فاليكانو؟')">
                 <div class="thumb-container">
                     <img src="https://img.youtube.com/vi/zAa2b0NLUgY/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>تحليل فوز برشلونة الأخير</h3>
+                <h3>هل سيميوني طعن هانز فليك في ديربي مدريد بعد عملية رايو فاليكانو؟</h3>
             </div>
 
-            <div class="item-box" onclick="switchToYT('6T7N_ikApZ4', 'بث مباشر سكاي نيوز')">
+            <div class="item-box" onclick="switchToYT('6T7N_ikApZ4', 'برشلونة يفوز على رايو فايكانو 1-0 اراوخو يجلب الهدف - انقاذات جوان غارسيا التاريخية للصدارة')">
                 <div class="thumb-container">
                     <img src="https://img.youtube.com/vi/6T7N_ikApZ4/mqdefault.jpg" alt="YT">
                     <span class="play-overlay">▶</span>
                 </div>
-                <h3>بث مباشر سكاي نيوز</h3>
+                <h3>برشلونة يفوز على رايو فايكانو 1-0 اراوخو يجلب الهدف - انقاذات جوان غارسيا التاريخية للصدارة</h3>
             </div>
         </div>
     </div>
