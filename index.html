@@ -3,108 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FORCA TV | البث المباشر</title>
+    <title>FORCA TV | منصة المشجعين</title>
     
     <script src="https://pl28961727.profitablecpmratenetwork.com/c3/3f/16/c33f165bbfa5fe7f26e4b260d5b6a6ed.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root { --barca-blue: #004d98; --barca-red: #a50044; --gold: #edbb00; }
-        body { background-color: var(--barca-blue); color: white; text-align: center; margin: 0; font-family: sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
-        .header { background: var(--barca-red); padding: 15px; border-bottom: 4px solid var(--gold); }
-        .main-container { width: 95%; max-width: 900px; margin: 10px auto; flex-grow: 1; }
-        .video-wrapper { background: #000; border: 3px solid var(--gold); border-radius: 15px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        body { background-color: var(--barca-blue); color: white; text-align: center; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .header { background: var(--barca-red); padding: 15px; border-bottom: 4px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .main-container { width: 95%; max-width: 1000px; margin: 15px auto; padding-bottom: 50px; }
+        .video-wrapper { background: #000; border: 3px solid var(--gold); border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         video { width: 100%; aspect-ratio: 16/9; display: block; }
-        .status-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .ad-section { margin: 20px auto; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .banner-300-250 { min-height: 250px; width: 300px; background: rgba(0,0,0,0.2); border-radius: 10px; }
-        .footer { padding: 20px; font-size: 0.8rem; opacity: 0.6; }
+        .live-btn { background: #e2001a; color: white; border: none; padding: 12px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; margin: 15px 0; transition: 0.3s; font-size: 1rem; }
+        .live-btn:hover { background: #b30014; transform: translateY(-2px); }
+        .yt-section { margin-top: 40px; }
+        .yt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .yt-item { background: rgba(0,0,0,0.4); border-radius: 15px; padding: 10px; border: 1px solid rgba(255,215,0,0.3); transition: 0.3s; }
+        .yt-item:hover { border-color: var(--gold); background: rgba(0,0,0,0.6); }
+        .iframe-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 10px; overflow: hidden; }
+        .iframe-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .yt-item h3 { font-size: 0.95rem; margin: 12px 0 5px 0; color: var(--gold); }
+        .ad-unit { margin: 20px auto; min-height: 250px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>FORCA TV</h1>
-        <small id="stream-label" style="color: var(--gold); font-weight: bold;">جاري فحص حالة البث...</small>
+        <div id="status-bar" style="font-size: 0.9rem; margin-top: 5px;">
+            <span id="dot" style="height: 10px; width: 10px; background-color: #bbb; border-radius: 50%; display: inline-block; margin-left: 5px;"></span>
+            <span id="stream-label">جاري التحقق من البث...</span>
+        </div>
     </div>
 
     <div class="main-container">
         <div class="video-wrapper">
-            <video id="video" controls autoplay muted playsinline></video>
+            <video id="video" controls autoplay playsinline></video>
         </div>
 
-        <div class="status-box">
-            <p id="status-text" style="margin: 0; font-weight: bold; font-size: 0.9rem;">انتظر لحظة...</p>
+        <button class="live-btn" onclick="checkAndPlay()">🔄 تحديث / تشغيل الصوت</button>
+
+        <div class="ad-unit">
+            <script type="text/javascript">
+                atOptions = {'key' : '6885d0e957b9c4c7a142c9e23f6f6850','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};
+            </script>
+            <script type="text/javascript" src="https://www.highperformanceformat.com/6885d0e957b9c4c7a142c9e23f6f6850/invoke.js"></script>
         </div>
 
-        <div class="ad-section">
-            <div class="banner-300-250">
-                <script type="text/javascript">
-                    atOptions = {'key' : '6885d0e957b9c4c7a142c9e23f6f6850','format' : 'iframe','height' : 250,'width' : 300,'params' : {}};
-                </script>
-                <script type="text/javascript" src="https://www.highperformanceformat.com/6885d0e957b9c4c7a142c9e23f6f6850/invoke.js"></script>
+        <div class="yt-section">
+            <h2 style="border-right: 5px solid var(--gold); padding-right: 15px; text-align: right; margin-bottom: 25px;">آخر التحليلات والأهداف</h2>
+            <div class="yt-grid">
+                <div class="yt-item">
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <h3>ملخص مباراة برشلونة الأخيرة</h3>
+                </div>
+                <div class="yt-item">
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <h3>تحليل أداء الفريق هذا الأسبوع</h3>
+                </div>
+                <div class="yt-item">
+                    <div class="iframe-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <h3>أخبار سوق الانتقالات الصيفية</h3>
+                </div>
             </div>
+        </div>
 
-            <div style="width: 100%;">
-                <script async="async" data-cfasync="false" src="https://pl28961754.profitablecpmratenetwork.com/0e2d2bf57e872fb24b14be95d705b754/invoke.js"></script>
-                <div id="container-0e2d2bf57e872fb24b14be95d705b754"></div>
-            </div>
+        <div style="margin-top: 30px;">
+            <script async="async" data-cfasync="false" src="https://pl28961754.profitablecpmratenetwork.com/0e2d2bf57e872fb24b14be95d705b754/invoke.js"></script>
+            <div id="container-0e2d2bf57e872fb24b14be95d705b754"></div>
         </div>
     </div>
 
-    <div class="footer">بث حي عبر fcbar.site - 2026</div>
-
     <script>
         const video = document.getElementById('video');
-        const statusText = document.getElementById('status-text');
-        const streamLabel = document.getElementById('stream-label');
+        const label = document.getElementById('stream-label');
+        const dot = document.getElementById('dot');
 
-        // --- إعدادات الروابط ---
         const liveUrl = 'https://live.fcbar.site/LiveApp/streams/reda123.m3u8';
-        const r2Url = 'https://media.fcbar.site/test.mp4'; // رابط المقطع الذي جربناه في R2
+        const r2Backup = 'https://media.fcbar.site/test.mp4';
 
         function checkAndPlay() {
-            // محاولة جلب ملف البث المباشر (M3U8) لفحص وجوده
+            // محاولة تشغيل الصوت فور الضغط على الزر (لحل مشكلة حظر المتصفح)
+            video.muted = false;
+            
             fetch(liveUrl, { method: 'HEAD' })
-            .then(response => {
-                if (response.ok) {
-                    playLive();
-                } else {
-                    playR2();
-                }
+            .then(res => {
+                if (res.ok) {
+                    if (Hls.isSupported()) {
+                        const hls = new Hls();
+                        hls.loadSource(liveUrl);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                            video.play().catch(e => console.log("Autoplay with sound blocked. User interaction needed."));
+                            updateStatus(true);
+                        });
+                    }
+                } else { playBackup(); }
             })
-            .catch(() => {
-                playR2(); // في حال فشل الاتصال تماماً (السيرفر طافي)
-            });
+            .catch(() => playBackup());
         }
 
-        function playLive() {
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(liveUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    video.play();
-                    statusText.innerText = "البث المباشر يعمل الآن ✅";
-                    statusText.style.color = "#00ff00";
-                    streamLabel.innerText = "بث حي ومباشر ⚽";
-                });
+        function playBackup() {
+            video.src = r2Backup;
+            video.loop = true;
+            video.muted = false; // التأكد من أن الصوت مفتوح
+            video.play().catch(e => {
+                console.log("Audio was muted due to browser policy. Re-muting to allow autoplay.");
+                video.muted = true; // إذا رفض المتصفح، سيعمل المقطع صامتاً لضمان عدم توقف الموقع
+                video.play();
+            });
+            updateStatus(false);
+        }
+
+        function updateStatus(isLive) {
+            if (isLive) {
+                label.innerText = "بث حي ومباشر الآن ✅";
+                dot.style.backgroundColor = "#00ff00";
+            } else {
+                label.innerText = "يعرض الآن: أجمل الأهداف (في انتظار المباراة)";
+                dot.style.backgroundColor = "#fff";
             }
         }
 
-        function playR2() {
-            video.src = r2Url;
-            video.loop = true; // نجعله يتكرر حالياً حتى نضيف السلسلة لاحقاً
-            video.play();
-            statusText.innerText = "انتظرونا في المباراة القادمة!";
-            streamLabel.innerText = "يعرض الآن: أجمل الأهداف";
-        }
-
-        // ابدأ العملية
+        // تشغيل أولي
         checkAndPlay();
+
+        // حل ذكي: عند أول نقرة للمستخدم في أي مكان بالموقع، يتم فتح الصوت تلقائياً
+        document.body.addEventListener('click', function() {
+            if (video.muted) {
+                video.muted = false;
+                video.play();
+            }
+        }, { once: true });
     </script>
 
     <script src="https://pl28961738.profitablecpmratenetwork.com/c0/f1/3f/c0f13f0e3752bc91ec64e84a0bc6eb05.js"></script>
-
 </body>
 </html>
