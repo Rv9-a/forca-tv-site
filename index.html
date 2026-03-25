@@ -222,7 +222,7 @@
 
     <script>
         const CONFIG = {
-            // الرابط الذي أكدت أنت أنه شغال في المتصفح
+            // استخدام HTTPS لضمان التوافق مع المتصفحات الحديثة
             liveUrl: "https://stream.fcbar.site/LiveApp/streams/server1.m3u8", 
             backupVideo: "https://media.fcbar.site/test.mp4"
         };
@@ -253,14 +253,23 @@
             video.muted = false; 
         }
 
+        // دالة مخصصة لتشغيل فيديو الإعلان عند انقطاع البث
+        function playBackup() {
+            if (hls) {
+                hls.destroy();
+                hls = null;
+            }
+            video.src = CONFIG.backupVideo;
+            video.loop = true;
+            video.play().catch(e => console.log("خطأ في تشغيل الإعلان"));
+        }
+
         function switchToLive() {
-            // إخفاء اليوتيوب وإظهار مشغل البث المباشر
             iframe.style.display = 'none';
             iframe.src = "";
             video.style.display = 'block';
             video.classList.add('active');
 
-            // تنظيف أي نسخة قديمة من HLS لضمان "السويتش" الحقيقي
             if (hls) {
                 hls.destroy();
                 hls = null;
@@ -268,39 +277,34 @@
 
             if (Hls.isSupported()) {
                 hls = new Hls({
-                    enableWorker: true,
-                    lowLatencyMode: true,
-                    backBufferLength: 0
+                    // تقليل المحاولات لسرعة التحويل للإعلان عند الفشل
+                    manifestLoadingMaxRetry: 1,
+                    levelLoadingMaxRetry: 1,
+                    enableWorker: true
                 });
                 
                 hls.loadSource(CONFIG.liveUrl);
                 hls.attachMedia(video);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    // البث يبدأ صامتاً لضمان عمل الـ Autoplay في المتصفح
                     video.muted = true; 
                     video.play().catch(e => console.log("بانتظار تفاعل المستخدم"));
                 });
 
+                // معالجة الخطأ: إذا لم يجد ملف البث، يحول للإعلان
                 hls.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
-                        switch (data.type) {
-                            case Hls.ErrorTypes.NETWORK_ERROR:
-                                hls.startLoad();
-                                break;
-                            case Hls.ErrorTypes.MEDIA_ERROR:
-                                hls.recoverMediaError();
-                                break;
-                            default:
-                                initHls(); // إعادة المحاولة بالكامل
-                                break;
-                        }
+                        console.log("انقطع البث.. جاري تشغيل مقطع الإعلان");
+                        playBackup();
                     }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // دعم أجهزة الآيفون
+                // دعم أجهزة آيفون
                 video.src = CONFIG.liveUrl;
                 video.play();
+                video.onerror = function() {
+                    playBackup();
+                };
             }
         }
 
@@ -345,7 +349,6 @@
                 </div>
             `).join('');
 
-            // تشغيل البث المباشر فور تحميل الصفحة
             switchToLive();
         }
 
