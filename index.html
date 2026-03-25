@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FORCA TV | Dashboard</title>
     
-    <!-- مكتبة HLS لتشغيل البث المباشر -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
@@ -25,7 +24,6 @@
             line-height: 1.6; 
         }
 
-        /* تنسيق الهيدر مع اللوجو */
         .header { 
             background: linear-gradient(90deg, var(--barca-blue), var(--barca-red)); 
             padding: 10px 20px; 
@@ -38,7 +36,7 @@
         }
 
         .header-logo { 
-            height: 70px; /* حجم اللوجو */
+            height: 70px; 
             width: auto;
             object-fit: contain;
             filter: drop-shadow(0 0 8px rgba(0,0,0,0.4));
@@ -191,13 +189,11 @@
 <body>
 
     <div class="header">
-        <!-- ملاحظة: الموقع سيبحث عن ملف اسمه logo.png بجانب ملف الـ html هذا -->
         <img src="logo.png" alt="FORCA TV" class="header-logo" onerror="this.style.display='none'">
         <h1>FORCA TV</h1>
     </div>
 
     <div class="main-container">
-        <!-- قسم مشغل الفيديو -->
         <div class="video-section">
             <div class="video-wrapper">
                 <video id="main-video" class="active" controls autoplay muted playsinline></video>
@@ -209,7 +205,6 @@
             </div>
         </div>
 
-        <!-- جداول المباريات -->
         <div class="data-grid">
             <div class="data-card">
                 <div class="section-title">المباريات المنتهية</div>
@@ -221,13 +216,13 @@
             </div>
         </div>
 
-        <!-- التحليلات -->
         <h2 style="text-align: right; border-right: 5px solid var(--gold); padding-right: 15px; margin-top: 50px;">أحدث التحليلات</h2>
         <div id="youtube-list" class="yt-grid"></div>
     </div>
 
     <script>
         const CONFIG = {
+            // الرابط الذي أكدت أنت أنه شغال في المتصفح
             liveUrl: "http://stream.fcbar.site/LiveApp/streams/server1.m3u8", 
             backupVideo: "https://media.fcbar.site/test.mp4"
         };
@@ -259,34 +254,62 @@
         }
 
         function switchToLive() {
+            // إخفاء اليوتيوب وإظهار مشغل البث المباشر
             iframe.style.display = 'none';
             iframe.src = "";
             video.style.display = 'block';
             video.classList.add('active');
 
+            // تنظيف أي نسخة قديمة من HLS لضمان "السويتش" الحقيقي
+            if (hls) {
+                hls.destroy();
+                hls = null;
+            }
+
             if (Hls.isSupported()) {
-                if (hls) hls.destroy();
-                hls = new Hls();
-                hls.loadSource(CONFIG.liveUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play().catch(() => console.log("بانتظار تفاعل المستخدم لفتح الصوت"));
+                hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 0
                 });
                 
-                hls.on(Hls.Events.ERROR, (event, data) => {
+                hls.loadSource(CONFIG.liveUrl);
+                hls.attachMedia(video);
+                
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    // البث يبدأ صامتاً لضمان عمل الـ Autoplay في المتصفح
+                    video.muted = true; 
+                    video.play().catch(e => console.log("بانتظار تفاعل المستخدم"));
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
-                        video.src = CONFIG.backupVideo;
-                        video.play();
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                initHls(); // إعادة المحاولة بالكامل
+                                break;
+                        }
                     }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // دعم أجهزة الآيفون
                 video.src = CONFIG.liveUrl;
                 video.play();
             }
         }
 
         function playYouTube(id) {
-            if (hls) hls.stopLoad();
+            if (hls) {
+                hls.stopLoad();
+                hls.destroy();
+                hls = null;
+            }
             video.pause();
             video.style.display = 'none';
             iframe.style.display = 'block';
@@ -318,10 +341,11 @@
                     <div class="thumb-container">
                         <img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg">
                     </div>
-                    <h3>${v.title}</h3>
+                    <h3 style="font-size:1rem; padding: 5px;">${v.title}</h3>
                 </div>
             `).join('');
 
+            // تشغيل البث المباشر فور تحميل الصفحة
             switchToLive();
         }
 
