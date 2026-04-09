@@ -222,7 +222,6 @@
 
     <script>
         const CONFIG = {
-            // استخدام HTTPS لضمان التوافق مع المتصفحات الحديثة
             liveUrl: "https://stream.fcbar.site/LiveApp/streams/server1.m3u8", 
             backupVideo: "https://media.fcbar.site/test.mp4"
         };
@@ -239,10 +238,11 @@
             { home: "برشلونة", away: "سيلتا فيغو", date: "22 ابريل", time: "10:30 مساءً" }
         ];
 
+        // تم تحديث الروابط الجديدة هنا فقط
         const YOUTUBE_LIST = [
-            { id: "UENAl15P36k", title: "برشلونة 1-0 رايو فايكانو - أسباب سوء الأداء | الكوتش" },
-            { id: "zAa2b0NLUgY", title: "هل سيميوني طعن هانز فليك في ديربي مدريد؟" },
-            { id: "6T7N_ikApZ4", title: "فوز برشلونة وتألق جوان غارسيا للصدارة" }
+            { id: "Yck-tl_V7Cw", title: "مباشر: تحليل ما قبل المباراة" },
+            { id: "0craqymsV9Q", title: "ملخص وأهداف المباراة الأخيرة" },
+            { id: "lyD10387T5A", title: "تغطية خاصة وكواليس التدريبات" }
         ];
 
         const video = document.getElementById('main-video');
@@ -253,7 +253,6 @@
             video.muted = false; 
         }
 
-        // دالة مخصصة لتشغيل فيديو الإعلان عند انقطاع البث
         function playBackup() {
             if (hls) {
                 hls.destroy();
@@ -277,7 +276,6 @@
 
             if (Hls.isSupported()) {
                 hls = new Hls({
-                    // تقليل المحاولات لسرعة التحويل للإعلان عند الفشل
                     manifestLoadingMaxRetry: 1,
                     levelLoadingMaxRetry: 1,
                     enableWorker: true
@@ -291,15 +289,12 @@
                     video.play().catch(e => console.log("بانتظار تفاعل المستخدم"));
                 });
 
-                // معالجة الخطأ: إذا لم يجد ملف البث، يحول للإعلان
                 hls.on(Hls.Events.ERROR, function (event, data) {
                     if (data.fatal) {
-                        console.log("انقطع البث.. جاري تشغيل مقطع الإعلان");
                         playBackup();
                     }
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // دعم أجهزة آيفون
                 video.src = CONFIG.liveUrl;
                 video.play();
                 video.onerror = function() {
